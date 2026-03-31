@@ -126,12 +126,12 @@ const SENSOR_TYPES = [
 // ── Classification labels ────────────────────────────────────
 const CLASSES = ['🐦 Birds', '🚗 Traffic', '💨 Wind', '🗣 Voices', '🏗 Construction', '🎵 Music'];
 const CLASS_COLORS = {
-  '🐦 Birds':        '#84cc16',
-  '🚗 Traffic':      '#94a3b8',
-  '💨 Wind':         '#38bdf8',
-  '🗣 Voices':       '#f472b6',
-  '🏗 Construction': '#f59e0b',
-  '🎵 Music':        '#a78bfa'
+  '🐦 Birds':        '#8fb98f',
+  '🚗 Traffic':      '#a8b8a8',
+  '💨 Wind':         '#a8c9c9',
+  '🗣 Voices':       '#c9a8b8',
+  '🏗 Construction': '#c9a85c',
+  '🎵 Music':        '#b5c9a1'
 };
 
 // ── Generate realistic dB value ──────────────────────────────
@@ -521,17 +521,17 @@ function timeAgo(date) {
   return `${Math.floor(diff/86400000)}d ago`;
 }
 function dbStatus(db) {
-  if (db < 45) return { label: 'QUIET',     color: '#22c55e' };
-  if (db < 60) return { label: 'MODERATE',  color: '#38bdf8' };
-  if (db < 75) return { label: 'LOUD',      color: '#f59e0b' };
-  return              { label: 'VERY LOUD', color: '#ef4444' };
+  if (db < 45) return { label: 'QUIET',     color: '#7ab87a' };
+  if (db < 60) return { label: 'MODERATE',  color: '#8fb98f' };
+  if (db < 75) return { label: 'LOUD',      color: '#c9a85c' };
+  return              { label: 'VERY LOUD', color: '#c97a6a' };
 }
 function dbColor(db) {
-  if (db < 45) return '#22c55e';
-  if (db < 60) return '#38bdf8';
-  if (db < 70) return '#f59e0b';
-  if (db < 80) return '#f97316';
-  return '#ef4444';
+  if (db < 45) return '#7ab87a';
+  if (db < 60) return '#8fb98f';
+  if (db < 70) return '#c9a85c';
+  if (db < 80) return '#c98a5c';
+  return '#c97a6a';
 }
 
 // Simulate next recording time
