@@ -50,11 +50,11 @@ function drawGauge(canvasId, value) {
 
   // Colored zone arcs
   const zones = [
-    { from: 0,    to: 0.45, color: '#22c55e' },
-    { from: 0.45, to: 0.60, color: '#38bdf8' },
-    { from: 0.60, to: 0.75, color: '#f59e0b' },
-    { from: 0.75, to: 0.85, color: '#f97316' },
-    { from: 0.85, to: 1.00, color: '#ef4444' }
+    { from: 0,    to: 0.45, color: '#7ab87a' },
+    { from: 0.45, to: 0.60, color: '#8fb98f' },
+    { from: 0.60, to: 0.75, color: '#c9a85c' },
+    { from: 0.75, to: 0.85, color: '#c98a5c' },
+    { from: 0.85, to: 1.00, color: '#c97a6a' }
   ];
   zones.forEach(zone => {
     ctx.beginPath();
@@ -67,7 +67,7 @@ function drawGauge(canvasId, value) {
 
   // Value arc
   const valAngle = startAngle + fraction * Math.PI;
-  const color = value < 45 ? '#22c55e' : value < 60 ? '#38bdf8' : value < 75 ? '#f59e0b' : value < 85 ? '#f97316' : '#ef4444';
+  const color = value < 45 ? '#7ab87a' : value < 60 ? '#8fb98f' : value < 75 ? '#c9a85c' : value < 85 ? '#c98a5c' : '#c97a6a';
   ctx.beginPath();
   ctx.arc(cx, cy, r, startAngle, valAngle);
   ctx.strokeStyle = color;
@@ -224,7 +224,7 @@ function renderFftChart(nodeId) {
   const fft = getFftData(nodeId);
   const c = getChartDefaults();
 
-  const colors = ['#22c55e','#38bdf8','#22d3ee','#818cf8','#a78bfa','#f472b6','#f59e0b'];
+  const colors = ['#7ab87a','#8fb98f','#a8c9a8','#b5c9a1','#c9a85c','#a89060','#c97a6a'];
 
   if (fftChartInstance) fftChartInstance.destroy();
 
@@ -268,7 +268,7 @@ function renderFftChart(nodeId) {
 }
 
 // ── 30-Day Trend Chart ────────────────────────────────────────
-const TREND_COLORS = ['#22d3ee','#f472b6','#f59e0b','#22c55e'];
+const TREND_COLORS = ['#8fb98f','#c9a85c','#a8c9a8','#c97a6a'];
 let activeTrendNodes = null;
 
 function renderTrendChart(visibleNodeIds) {
@@ -396,7 +396,7 @@ function renderComplianceChart(nodeId, threshold, fromHour, toHour) {
       labels: days.map(d => formatDate(new Date(d))),
       datasets: [{
         data: scores,
-        backgroundColor: scores.map(s => s >= 80 ? '#22c55e99' : s >= 60 ? '#f59e0b99' : '#ef444499'),
+        backgroundColor: scores.map(s => s >= 80 ? '#7ab87a99' : s >= 60 ? '#c9a85c99' : '#c97a6a99'),
         borderRadius: 3
       }]
     },
@@ -466,17 +466,17 @@ function renderHeatmap(nodeId) {
 }
 
 function heatColor(db) {
-  if (db < 35) return '#0f3a2a';
-  if (db < 45) return '#14532d';
-  if (db < 50) return '#166534';
-  if (db < 55) return '#15803d';
-  if (db < 60) return '#16a34a';
-  if (db < 65) return '#ca8a04';
-  if (db < 70) return '#d97706';
-  if (db < 75) return '#ea580c';
-  if (db < 80) return '#dc2626';
-  if (db < 85) return '#b91c1c';
-  return '#7f1d1d';
+  if (db < 35) return '#1e2d23';
+  if (db < 45) return '#2d4a30';
+  if (db < 50) return '#3a5e3a';
+  if (db < 55) return '#4a7a4a';
+  if (db < 60) return '#6a9e6a';
+  if (db < 65) return '#8fb98f';
+  if (db < 70) return '#c9a85c';
+  if (db < 75) return '#c98a5c';
+  if (db < 80) return '#b86a4a';
+  if (db < 85) return '#a05040';
+  return '#8a3a30';
 }
 
 // ── Stats Summary ─────────────────────────────────────────────
