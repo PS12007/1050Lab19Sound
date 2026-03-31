@@ -31,8 +31,8 @@ function renderNodeMarkers() {
   nodeMarkers = {};
 
   NODES.forEach(node => {
-    const color = node.status === 'active' ? '#22c55e' :
-                  node.status === 'warning' ? '#f59e0b' : '#ef4444';
+    const color = node.status === 'active' ? '#7ab87a' :
+                  node.status === 'warning' ? '#c9a85c' : '#c97a6a';
 
     const icon = L.divIcon({
       className: '',
