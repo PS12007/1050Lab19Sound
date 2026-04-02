@@ -212,6 +212,14 @@ function renderRecordingsPage() {
   if (fromVal) sessions = sessions.filter(s => s.timestamp >= new Date(fromVal));
   if (toVal) sessions = sessions.filter(s => s.timestamp <= new Date(toVal + 'T23:59:59'));
 
+  // Show only the most recent session per node
+  const seenNodes = new Set();
+  sessions = sessions.filter(s => {
+    if (seenNodes.has(s.nodeId)) return false;
+    seenNodes.add(s.nodeId);
+    return true;
+  });
+
   document.getElementById('rec-count').textContent = `${sessions.length} sessions`;
 
   const start = (recPage - 1) * REC_PER_PAGE;
