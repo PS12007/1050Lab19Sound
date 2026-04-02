@@ -105,9 +105,6 @@ function renderOverview(node) {
   document.getElementById('sched-bit').textContent = AppState.settings.bitDepth;
   document.getElementById('next-rec').textContent = nextRecordingTime();
 
-  // Classification timeline
-  renderClassifyTimeline(node.id);
-
   // Chart
   const activeRange = document.querySelector('.range-btn.active')?.dataset.range || '24h';
   render24hChart(node.id, activeRange);
@@ -197,7 +194,6 @@ const REC_PER_PAGE = 15;
 
 function renderRecordingsPage() {
   const nodeId = document.getElementById('rec-node-filter')?.value || '';
-  const classFilter = document.getElementById('rec-class-filter')?.value || '';
   const fromVal = document.getElementById('rec-date-from')?.value;
   const toVal = document.getElementById('rec-date-to')?.value;
 
@@ -213,7 +209,6 @@ function renderRecordingsPage() {
 
   let sessions = [...ALL_SESSIONS];
   if (nodeId) sessions = sessions.filter(s => s.nodeId === nodeId);
-  if (classFilter) sessions = sessions.filter(s => s.dominantClass === classFilter);
   if (fromVal) sessions = sessions.filter(s => s.timestamp >= new Date(fromVal));
   if (toVal) sessions = sessions.filter(s => s.timestamp <= new Date(toVal + 'T23:59:59'));
 
@@ -225,7 +220,6 @@ function renderRecordingsPage() {
   const tbody = document.getElementById('rec-tbody');
   tbody.innerHTML = paged.map(s => {
     const node = NODES.find(n => n.id === s.nodeId);
-    const cls = CLASS_COLORS[s.dominantClass] || '#94a3b8';
     return `
       <tr class="rec-row" data-id="${s.id}" style="cursor:pointer;">
         <td class="mono" style="font-size:0.75rem;">${formatDateTime(s.timestamp)}</td>
@@ -233,7 +227,6 @@ function renderRecordingsPage() {
         <td class="mono">${s.duration}</td>
         <td class="mono" style="color:${dbColor(s.avgDb)}">${s.avgDb}</td>
         <td class="mono" style="color:${dbColor(s.peakDb)}">${s.peakDb}</td>
-        <td><span style="font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:100px; border:1px solid ${cls}44; color:${cls}; background:${cls}11;">${s.dominantClass}</span></td>
         <td class="mono" style="color:var(--text3)">${s.fileSize}</td>
         <td><button class="btn btn-ghost btn-sm" onclick="toggleRecDetail(event,'${s.id}')">▼</button></td>
       </tr>
@@ -259,7 +252,7 @@ function toggleRecDetail(e, sessionId) {
   detail.id = `detail-${sessionId}`;
   detail.className = 'rec-expanded';
   detail.innerHTML = `
-    <td colspan="8">
+    <td colspan="7">
       <div class="rec-detail">
         <div class="rec-detail-inner">
           <div>
@@ -267,14 +260,13 @@ function toggleRecDetail(e, sessionId) {
               ${session.samples.length} samples @ 5-min intervals
             </div>
             <table class="rec-sample-table">
-              <thead><tr><th>#</th><th>Timestamp</th><th>dB</th><th>Classification</th><th>Freq Peak</th></tr></thead>
+              <thead><tr><th>#</th><th>Timestamp</th><th>dB</th><th>Freq Peak</th></tr></thead>
               <tbody>
                 ${session.samples.map(sp => `
                   <tr>
                     <td>${sp.sampleNum}</td>
                     <td style="font-family:var(--font-mono)">${formatTime(sp.timestamp)}</td>
                     <td style="font-family:var(--font-mono); color:${dbColor(sp.db)}">${sp.db}</td>
-                    <td><span style="color:${CLASS_COLORS[sp.classification]||'#94a3b8'}; font-size:0.75rem;">${sp.classification}</span></td>
                     <td style="font-family:var(--font-mono); color:var(--text3)">${sp.freqPeak} Hz</td>
                   </tr>
                 `).join('')}
@@ -291,13 +283,14 @@ function toggleRecDetail(e, sessionId) {
             <div style="font-size:0.78rem; display:flex; flex-direction:column; gap:0.3rem;">
               <span>Avg: <strong style="font-family:var(--font-mono)">${session.avgDb} dB</strong></span>
               <span>Peak: <strong style="font-family:var(--font-mono); color:${dbColor(session.peakDb)}">${session.peakDb} dB</strong></span>
+              <span>Node: <strong>${NODES.find(n=>n.id===session.nodeId)?.name||session.nodeId}</strong></span>
             </div>
           </div>
         </div>
         <div class="rec-actions">
           <button class="btn btn-ghost btn-sm" onclick="downloadWav('${session.id}')">⇩ WAV</button>
           <button class="btn btn-ghost btn-sm" onclick="downloadSessionCsv('${session.id}')">⇩ CSV</button>
-          <button class="btn btn-ghost btn-sm" onclick="selectNode('${session.nodeId}'); showPage('nodes')">⊕ On Map</button>
+          <button class="btn btn-ghost btn-sm" onclick="selectNode('${session.nodeId}'); showPage('nodes')">⊕ Map</button>
         </div>
       </div>
     </td>
