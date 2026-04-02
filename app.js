@@ -128,7 +128,7 @@ function setupEventListeners() {
   });
 
   // ── Recordings filters ────────────────────────────────────────
-  ['rec-date-from','rec-date-to','rec-node-filter','rec-class-filter'].forEach(id => {
+  ['rec-date-from','rec-date-to','rec-node-filter'].forEach(id => {
     document.getElementById(id)?.addEventListener('change', () => { recPage = 1; renderRecordingsPage(); });
   });
 
