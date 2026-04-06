@@ -269,6 +269,54 @@
               <div id="spike-list"></div>
             </div>
 
+            <!-- CSV UPLOAD & ANALYSIS -->
+            <div class="card csv-upload-card">
+              <div class="card-header">
+                <span class="card-title">📂 Upload Your Data</span>
+                <span class="card-sub">CSV · Time + dB columns</span>
+              </div>
+              <div class="csv-upload-body">
+                <div class="csv-drop-zone" id="csv-drop-zone">
+                  <div class="csv-drop-icon">⇪</div>
+                  <div class="csv-drop-text">Drop your CSV here or <span class="csv-browse-link" id="csv-browse-link">browse</span></div>
+                  <div class="csv-drop-hint">Expected format: Column A = Date/Time &nbsp;·&nbsp; Column B = dB value<br/>First row = headers (Time, Environment)</div>
+                  <input type="file" id="csv-upload-input" accept=".csv" style="display:none" />
+                </div>
+                <div id="csv-results" class="hidden">
+                  <div class="csv-stats-row" id="csv-stats-row"></div>
+                  <div class="csv-charts-grid">
+                    <div class="card csv-chart-card">
+                      <div class="card-header"><span class="card-title">dB Over Time</span><span id="csv-file-label" class="card-sub"></span></div>
+                      <div style="height:220px; padding:0.5rem;"><canvas id="csvLineChart"></canvas></div>
+                    </div>
+                    <div class="card csv-chart-card">
+                      <div class="card-header"><span class="card-title">Hourly Average</span><span class="card-sub">avg dB by hour of day</span></div>
+                      <div style="height:220px; padding:0.5rem;"><canvas id="csvHourChart"></canvas></div>
+                    </div>
+                    <div class="card csv-chart-card">
+                      <div class="card-header"><span class="card-title">dB Distribution</span><span class="card-sub">how often each level occurs</span></div>
+                      <div style="height:220px; padding:0.5rem;"><canvas id="csvDistChart"></canvas></div>
+                    </div>
+                    <div class="card csv-chart-card">
+                      <div class="card-header"><span class="card-title">Daily Trend</span><span class="card-sub">avg dB per day</span></div>
+                      <div style="height:220px; padding:0.5rem;"><canvas id="csvDailyChart"></canvas></div>
+                    </div>
+                  </div>
+                  <div class="csv-table-wrap card">
+                    <div class="card-header">
+                      <span class="card-title">Raw Data Preview</span>
+                      <button class="btn btn-ghost btn-sm" id="csv-clear-btn">✕ Clear</button>
+                    </div>
+                    <table class="data-table">
+                      <thead><tr><th>#</th><th>Timestamp</th><th>dB</th><th>Level</th></tr></thead>
+                      <tbody id="csv-preview-tbody"></tbody>
+                    </table>
+                    <div style="padding:0.5rem 1rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text3)" id="csv-preview-note"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
         </div>
       </section>
 
