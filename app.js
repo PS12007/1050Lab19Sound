@@ -17,6 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
       renderNodeBar();
       showPage('overview');
       startLiveUpdates();
+      setupCsvUpload();
     }, 500);
   }, 2000);
 
@@ -311,7 +312,246 @@ function connectBt(name, id) {
   renderBtStatus();
 }
 
-// ── Add node ──────────────────────────────────────────────────
+// ── CSV Upload & Analysis ─────────────────────────────────────
+let csvLineChart = null, csvHourChart = null, csvDistChart = null, csvDailyChart = null;
+
+function setupCsvUpload() {
+  const dropZone  = document.getElementById('csv-drop-zone');
+  const fileInput = document.getElementById('csv-upload-input');
+  const browseLink = document.getElementById('csv-browse-link');
+
+  if (!dropZone) return;
+
+  browseLink.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) handleCsvFile(e.target.files[0]);
+    e.target.value = '';
+  });
+
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.csv')) handleCsvFile(file);
+    else showToast('Please drop a .csv file', 'error');
+  });
+
+  document.getElementById('csv-clear-btn')?.addEventListener('click', clearCsvResults);
+}
+
+function handleCsvFile(file) {
+  showToast(`Reading ${file.name}…`, 'info', 1500);
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const rows = parseCsv(e.target.result);
+    if (!rows || rows.length === 0) {
+      showToast('Could not parse CSV — check the format', 'error'); return;
+    }
+    renderCsvResults(rows, file.name);
+    showToast(`Loaded ${rows.length} readings from ${file.name}`, 'success');
+  };
+  reader.readAsText(file);
+}
+
+function parseCsv(text) {
+  // Split lines, skip empty
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) return null;
+
+  // Skip header row (row 0 = "Time, Environment" or similar)
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const parts = lines[i].split(',');
+    if (parts.length < 2) continue;
+
+    // Column A: date/time like "4/2/2026 10:15:12 AM"
+    const rawTime = parts[0].trim().replace(/^"|"$/g, '');
+    // Column B: dB value like "23.42"
+    const rawDb = parts[1].trim().replace(/^"|"$/g, '');
+
+    const ts = new Date(rawTime);
+    const db = parseFloat(rawDb);
+
+    if (isNaN(ts.getTime()) || isNaN(db)) continue;
+    rows.push({ ts, db });
+  }
+  return rows.sort((a, b) => a.ts - b.ts);
+}
+
+function renderCsvResults(rows, filename) {
+  document.getElementById('csv-results').classList.remove('hidden');
+  document.getElementById('csv-drop-zone').style.display = 'none';
+  document.getElementById('csv-file-label').textContent = filename;
+
+  // ── Stats ───────────────────────────────────────────────────
+  const dbs = rows.map(r => r.db);
+  const avg  = dbs.reduce((a,b)=>a+b,0) / dbs.length;
+  const peak = Math.max(...dbs);
+  const low  = Math.min(...dbs);
+  const above70 = dbs.filter(d => d >= 70).length;
+  const pctLoud = ((above70 / dbs.length) * 100).toFixed(1);
+  const spanDays = Math.max(1, Math.round((rows[rows.length-1].ts - rows[0].ts) / 86400000));
+
+  document.getElementById('csv-stats-row').innerHTML = `
+    <div class="csv-stat-box"><div class="csv-stat-val">${rows.length}</div><div class="csv-stat-label">Total readings</div></div>
+    <div class="csv-stat-box"><div class="csv-stat-val">${avg.toFixed(1)} dB</div><div class="csv-stat-label">Average level</div></div>
+    <div class="csv-stat-box"><div class="csv-stat-val" style="color:var(--danger)">${peak.toFixed(1)} dB</div><div class="csv-stat-label">Peak level</div></div>
+    <div class="csv-stat-box"><div class="csv-stat-val" style="color:var(--success)">${low.toFixed(1)} dB</div><div class="csv-stat-label">Lowest level</div></div>
+    <div class="csv-stat-box"><div class="csv-stat-val">${pctLoud}%</div><div class="csv-stat-label">Readings ≥ 70 dB</div></div>
+    <div class="csv-stat-box"><div class="csv-stat-val">${spanDays}</div><div class="csv-stat-label">Days spanned</div></div>
+  `;
+
+  // ── Chart defaults ──────────────────────────────────────────
+  const gridColor = 'rgba(143,185,143,0.08)';
+  const textColor = '#a8bea8';
+  const accent    = '#8fb98f';
+
+  // ── Line chart: dB over time ────────────────────────────────
+  // Downsample to max 300 points for performance
+  const step = Math.max(1, Math.floor(rows.length / 300));
+  const sampled = rows.filter((_, i) => i % step === 0);
+
+  if (csvLineChart) csvLineChart.destroy();
+  csvLineChart = new Chart(document.getElementById('csvLineChart'), {
+    type: 'line',
+    data: {
+      labels: sampled.map(r => formatDateTime(r.ts)),
+      datasets: [{
+        data: sampled.map(r => r.db),
+        borderColor: accent,
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: true,
+        backgroundColor: accent + '22',
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toFixed(1)} dB` } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, maxTicksLimit: 6, maxRotation: 0 } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => v + ' dB' } }
+      }
+    }
+  });
+
+  // ── Hourly average chart ────────────────────────────────────
+  const hourBuckets = Array.from({length: 24}, () => []);
+  rows.forEach(r => hourBuckets[r.ts.getHours()].push(r.db));
+  const hourAvgs = hourBuckets.map(b => b.length ? b.reduce((a,c)=>a+c,0)/b.length : null);
+  const hourColors = hourAvgs.map(v => v === null ? '#2d3f32' : v < 50 ? '#7ab87a99' : v < 65 ? '#8fb98f99' : v < 75 ? '#c9a85c99' : '#c97a6a99');
+
+  if (csvHourChart) csvHourChart.destroy();
+  csvHourChart = new Chart(document.getElementById('csvHourChart'), {
+    type: 'bar',
+    data: {
+      labels: Array.from({length:24}, (_,i) => `${String(i).padStart(2,'0')}:00`),
+      datasets: [{ data: hourAvgs, backgroundColor: hourColors, borderRadius: 3 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.raw ? ` ${ctx.raw.toFixed(1)} dB` : ' no data' } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, maxRotation: 45, font: { size: 9 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => v + ' dB' } }
+      }
+    }
+  });
+
+  // ── Distribution histogram ──────────────────────────────────
+  const buckets = {};
+  const bSize = 5;
+  dbs.forEach(d => {
+    const b = Math.floor(d / bSize) * bSize;
+    buckets[b] = (buckets[b] || 0) + 1;
+  });
+  const distLabels = Object.keys(buckets).sort((a,b)=>+a-+b).map(b => `${b}–${+b+bSize}`);
+  const distVals   = Object.keys(buckets).sort((a,b)=>+a-+b).map(b => buckets[b]);
+  const distColors = Object.keys(buckets).sort((a,b)=>+a-+b).map(b => +b < 50 ? '#7ab87a99' : +b < 65 ? '#8fb98f99' : +b < 75 ? '#c9a85c99' : '#c97a6a99');
+
+  if (csvDistChart) csvDistChart.destroy();
+  csvDistChart = new Chart(document.getElementById('csvDistChart'), {
+    type: 'bar',
+    data: {
+      labels: distLabels,
+      datasets: [{ data: distVals, backgroundColor: distColors, borderRadius: 3 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} readings` } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, maxRotation: 45, font: { size: 9 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor } }
+      }
+    }
+  });
+
+  // ── Daily average trend ─────────────────────────────────────
+  const dayBuckets = {};
+  rows.forEach(r => {
+    const key = r.ts.toISOString().slice(0,10);
+    if (!dayBuckets[key]) dayBuckets[key] = [];
+    dayBuckets[key].push(r.db);
+  });
+  const dayLabels = Object.keys(dayBuckets).sort();
+  const dayAvgs   = dayLabels.map(d => dayBuckets[d].reduce((a,b)=>a+b,0)/dayBuckets[d].length);
+
+  if (csvDailyChart) csvDailyChart.destroy();
+  csvDailyChart = new Chart(document.getElementById('csvDailyChart'), {
+    type: 'line',
+    data: {
+      labels: dayLabels.map(d => formatDate(new Date(d))),
+      datasets: [{
+        data: dayAvgs,
+        borderColor: '#b5c9a1',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: '#b5c9a1',
+        fill: true,
+        backgroundColor: '#b5c9a122',
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw.toFixed(1)} dB avg` } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { color: textColor, maxRotation: 45, font: { size: 9 } } },
+        y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => v + ' dB' } }
+      }
+    }
+  });
+
+  // ── Preview table (first 50 rows) ───────────────────────────
+  const preview = rows.slice(0, 50);
+  document.getElementById('csv-preview-tbody').innerHTML = preview.map((r, i) => {
+    const lvl = r.db < 45 ? '<span style="color:#7ab87a">Quiet</span>' :
+                r.db < 60 ? '<span style="color:#8fb98f">Moderate</span>' :
+                r.db < 75 ? '<span style="color:#c9a85c">Loud</span>' :
+                            '<span style="color:#c97a6a">Very Loud</span>';
+    return `<tr>
+      <td class="mono" style="color:var(--text3)">${i+1}</td>
+      <td class="mono" style="font-size:0.75rem">${formatDateTime(r.ts)}</td>
+      <td class="mono" style="color:${r.db>=70?'var(--danger)':'var(--text)'}">${r.db.toFixed(2)}</td>
+      <td>${lvl}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('csv-preview-note').textContent =
+    rows.length > 50 ? `Showing first 50 of ${rows.length} readings` : `All ${rows.length} readings shown`;
+}
+
+function clearCsvResults() {
+  document.getElementById('csv-results').classList.add('hidden');
+  document.getElementById('csv-drop-zone').style.display = '';
+  [csvLineChart, csvHourChart, csvDistChart, csvDailyChart].forEach(c => { if (c) c.destroy(); });
+  csvLineChart = csvHourChart = csvDistChart = csvDailyChart = null;
+  document.getElementById('csv-upload-input').value = '';
+}
 function saveNewNode() {
   const name = document.getElementById('mn-name').value.trim();
   const loc  = document.getElementById('mn-loc').value.trim();
