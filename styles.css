@@ -403,6 +403,58 @@ canvas { display: block; }
 .audio-fill { height: 100%; width: 35%; background: var(--accent); border-radius: 2px; }
 .audio-time { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text3); white-space: nowrap; }
 
+/* ── CSV Upload & Analysis ───────────────────────────────────── */
+.csv-upload-card { }
+.csv-upload-body { padding: 1rem 1.1rem 1.25rem; }
+
+.csv-drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--trans);
+  background: var(--bg3);
+}
+.csv-drop-zone:hover, .csv-drop-zone.drag-over {
+  border-color: var(--accent);
+  background: rgba(143,185,143,0.07);
+}
+.csv-drop-icon { font-size: 2rem; margin-bottom: 0.5rem; color: var(--accent); }
+.csv-drop-text { font-size: 0.88rem; color: var(--text2); margin-bottom: 0.4rem; }
+.csv-browse-link { color: var(--accent); text-decoration: underline; cursor: pointer; }
+.csv-drop-hint { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text3); line-height: 1.7; }
+
+.csv-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.csv-stat-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+}
+.csv-stat-val { font-family: var(--font-mono); font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+.csv-stat-label { font-size: 0.7rem; color: var(--text3); margin-top: 0.15rem; }
+
+.csv-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+.csv-chart-card { }
+
+.csv-table-wrap { margin-top: 0; }
+#csv-preview-tbody tr td:nth-child(4) { font-size: 0.72rem; }
+
+@media (max-width: 768px) {
+  .csv-charts-grid { grid-template-columns: 1fr; }
+}
+
 /* ── Analytics ───────────────────────────────────────────────── */
 .analytics-grid { grid-template-columns: 1fr 1fr; }
 .heatmap-card { grid-column: 1 / -1; }
