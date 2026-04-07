@@ -42,14 +42,14 @@ function showPage(pageId) {
 }
 
 function refreshCurrentPage() {
-  const id = AppState.currentPage;
+  const id   = AppState.currentPage;
   const node = NODES.find(n=>n.id===AppState.selectedNodeId);
-  if (id==='overview')   renderOverview(node);
-  if (id==='nodes')      renderNodesPage();
-  if (id==='recordings') renderRecordingsPage();
-  if (id==='analytics')  renderAnalyticsPage();
-  if (id==='export')     renderExportPage();
-  if (id==='settings')   renderSettingsPage();
+  try { if (id==='overview')   renderOverview(node); }   catch(e){ console.error('overview err',e); }
+  try { if (id==='nodes')      renderNodesPage(); }       catch(e){ console.error('nodes err',e); }
+  try { if (id==='recordings') renderRecordingsPage(); }  catch(e){ console.error('recordings err',e); }
+  try { if (id==='analytics')  renderAnalyticsPage(); }   catch(e){ console.error('analytics err',e); }
+  try { if (id==='export')     renderExportPage(); }      catch(e){ console.error('export err',e); }
+  try { if (id==='settings')   renderSettingsPage(); }    catch(e){ console.error('settings err',e); }
 }
 
 // ── Overview ──────────────────────────────────────────────────
