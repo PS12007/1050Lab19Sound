@@ -1,25 +1,14 @@
 {
-  "name": "CampusSound Monitor",
-  "short_name": "CampusSound",
-  "description": "University environmental soundscape monitoring system",
+  "name": "EcoEcho Monitor",
+  "short_name": "EcoEcho",
+  "description": "Environmental sound monitoring system",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#0a0f1e",
-  "background_color": "#0a0f1e",
-  "categories": ["science", "utilities"],
+  "theme_color": "#1e2d23",
+  "background_color": "#1e2d23",
   "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
