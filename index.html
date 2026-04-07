@@ -3,94 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0f1e" />
+  <meta name="theme-color" content="#1e2d23" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="CampusSound" />
-  <title>CampusSound Monitor</title>
+  <meta name="apple-mobile-web-app-title" content="EcoEcho" />
+  <title>EcoEcho Monitor</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-
-  <!-- Leaflet -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=Cinzel:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- ========== SPLASH SCREEN ========== -->
 <div id="splash">
   <div class="splash-inner">
     <div class="splash-icon">
       <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="30" cy="30" r="28" stroke="var(--accent)" stroke-width="2"/>
-        <path d="M20 30 Q22 22 25 30 Q28 38 30 26 Q32 14 35 30 Q37 42 40 30" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="30" cy="30" r="28" stroke="var(--accent)" stroke-width="1.5"/>
+        <polygon points="30,10 43,31 17,31" fill="var(--accent)" opacity="0.95"/>
+        <polygon points="30,19 45,38 15,38" fill="var(--accent)" opacity="0.75"/>
+        <rect x="27" y="38" width="6" height="11" rx="1.5" fill="var(--accent)" opacity="0.88"/>
       </svg>
     </div>
-    <div class="splash-title">CampusSound</div>
-    <div class="splash-sub">Environmental Monitoring System</div>
+    <div class="splash-title">EcoEcho</div>
+    <div class="splash-sub">Environmental Sound Monitoring</div>
     <div class="splash-bar"><div class="splash-fill"></div></div>
   </div>
 </div>
 
-<!-- ========== APP WRAPPER ========== -->
 <div id="app" class="hidden">
-
-  <!-- DESKTOP SIDEBAR -->
   <aside id="sidebar">
     <div class="sidebar-brand">
-      <svg class="brand-icon" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="18" stroke="var(--accent)" stroke-width="1.5"/>
-        <path d="M10 20 Q13 13 16 20 Q18 25 20 16 Q22 8 25 20 Q27 28 30 20" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <svg class="brand-icon" viewBox="0 0 36 40" fill="none">
+        <polygon points="18,2 31,18 5,18" fill="var(--accent)" opacity="0.95"/>
+        <polygon points="18,12 33,30 3,30" fill="var(--accent)" opacity="0.75"/>
+        <rect x="15" y="30" width="6" height="9" rx="1.5" fill="var(--accent)" opacity="0.88"/>
       </svg>
-      <span>CampusSound</span>
+      <span class="brand-name">EcoEcho</span>
     </div>
     <nav class="sidebar-nav">
-      <a class="nav-item active" data-page="overview">
-        <span class="nav-icon">◉</span><span class="nav-label">Overview</span>
-      </a>
-      <a class="nav-item" data-page="nodes">
-        <span class="nav-icon">◈</span><span class="nav-label">Nodes</span>
-      </a>
-      <a class="nav-item" data-page="recordings">
-        <span class="nav-icon">▤</span><span class="nav-label">Recordings</span>
-      </a>
-      <a class="nav-item" data-page="analytics">
-        <span class="nav-icon">◫</span><span class="nav-label">Analytics</span>
-      </a>
-      <a class="nav-item" data-page="export">
-        <span class="nav-icon">⇅</span><span class="nav-label">Export</span>
-      </a>
-      <a class="nav-item" data-page="settings">
-        <span class="nav-icon">◎</span><span class="nav-label">Settings</span>
-      </a>
+      <a class="nav-item active" data-page="overview"><span class="nav-icon">◉</span><span class="nav-label">Overview</span></a>
+      <a class="nav-item" data-page="nodes"><span class="nav-icon">◈</span><span class="nav-label">Nodes</span></a>
+      <a class="nav-item" data-page="recordings"><span class="nav-icon">▤</span><span class="nav-label">Recordings</span></a>
+      <a class="nav-item" data-page="analytics"><span class="nav-icon">◫</span><span class="nav-label">Analytics</span></a>
+      <a class="nav-item" data-page="export"><span class="nav-icon">⇅</span><span class="nav-label">Export</span></a>
+      <a class="nav-item" data-page="settings"><span class="nav-icon">◎</span><span class="nav-label">Settings</span></a>
     </nav>
     <div class="sidebar-footer">
-      <div class="bt-status" id="sidebar-bt">
-        <span class="bt-dot"></span>
-        <span id="sidebar-bt-label">No Device</span>
-      </div>
-      <div class="app-version">v1.0.0 · UWO Research</div>
+      <div class="bt-status" id="sidebar-bt"><span class="bt-dot"></span><span id="sidebar-bt-label">No Device</span></div>
+      <div class="app-version">v1.0.0 · EcoEcho Research</div>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT AREA -->
   <div id="main-wrap">
-
-    <!-- TOP HEADER -->
     <header id="topbar">
       <button id="menu-toggle" class="icon-btn">☰</button>
       <div class="topbar-center">
-        <div class="topbar-title">CampusSound</div>
+        <div class="topbar-title">EcoEcho</div>
         <div class="topbar-sync" id="sync-label">Last sync: just now</div>
       </div>
       <div class="topbar-actions">
@@ -100,16 +74,14 @@
       </div>
     </header>
 
-    <!-- NODE SELECTOR BAR -->
     <div id="node-bar">
-      <span class="node-bar-label">Node:</span>
+      <span class="node-bar-label">Device:</span>
       <div id="node-tabs"></div>
     </div>
 
-    <!-- PAGE CONTAINER -->
     <main id="pages">
 
-      <!-- ===== PAGE: OVERVIEW ===== -->
+      <!-- OVERVIEW -->
       <section class="page active" id="page-overview">
         <div class="page-grid overview-grid">
 
@@ -121,8 +93,9 @@
               <div class="gauge-unit">dB SPL</div>
             </div>
             <div class="gauge-minmax">
-              <div><span class="mm-label">MIN</span><span class="mm-val" id="today-min">31</span><span class="mm-unit">dB</span></div>
-              <div><span class="mm-label">MAX</span><span class="mm-val" id="today-max">78</span><span class="mm-unit">dB</span></div>
+              <div><span class="mm-label">MIN</span><span class="mm-val" id="today-min">—</span><span class="mm-unit">dB</span></div>
+              <div><span class="mm-label">AVG Hz</span><span class="mm-val" id="today-avghz">—</span><span class="mm-unit">Hz</span></div>
+              <div><span class="mm-label">MAX</span><span class="mm-val" id="today-max">—</span><span class="mm-unit">dB</span></div>
             </div>
           </div>
 
@@ -135,9 +108,7 @@
                   <div class="bt-device-name" id="bt-device-name">Not Connected</div>
                   <div class="bt-device-sub" id="bt-device-sub">Tap to scan for devices</div>
                 </div>
-                <div class="bt-signal-bars" id="bt-signal">
-                  <span></span><span></span><span></span><span></span>
-                </div>
+                <div class="bt-signal-bars" id="bt-signal"><span></span><span></span><span></span><span></span></div>
               </div>
               <div class="bt-stats">
                 <div class="bt-stat"><span class="stat-l">Last Sync</span><span class="stat-v" id="bt-last-sync">—</span></div>
@@ -155,20 +126,17 @@
             <div class="card-header"><span class="card-title">Power Status</span></div>
             <div class="power-rows">
               <div class="power-row">
-                <span class="power-icon">☀</span>
-                <span class="power-label">Solar</span>
+                <span class="power-icon">☀</span><span class="power-label">Solar</span>
                 <div class="power-bar-wrap"><div class="power-bar solar-bar" id="solar-bar" style="width:74%"></div></div>
                 <span class="power-pct" id="solar-pct">74%</span>
               </div>
               <div class="power-row">
-                <span class="power-icon">⚡</span>
-                <span class="power-label">Battery</span>
+                <span class="power-icon">⚡</span><span class="power-label">Battery</span>
                 <div class="power-bar-wrap"><div class="power-bar batt-bar" id="batt-bar" style="width:68%"></div></div>
                 <span class="power-pct" id="batt-pct">68%</span>
               </div>
               <div class="power-row">
-                <span class="power-icon">💾</span>
-                <span class="power-label">SD Card</span>
+                <span class="power-icon">💾</span><span class="power-label">SD Card</span>
                 <div class="power-bar-wrap"><div class="power-bar sd-bar" id="sd-bar" style="width:31%"></div></div>
                 <span class="power-pct" id="sd-pct">31%</span>
               </div>
@@ -176,23 +144,9 @@
             <div class="gps-row">
               <span class="gps-icon">⊕</span>
               <div>
-                <div class="gps-coords" id="node-gps">43.0103, -81.2756</div>
+                <div class="gps-coords" id="node-gps">—</div>
                 <div class="gps-tz" id="node-tz">America/Toronto · UTC-5</div>
               </div>
-            </div>
-          </div>
-
-          <div class="card chart24-card">
-            <div class="card-header">
-              <span class="card-title">24-Hour History</span>
-              <div class="chart-range-btns">
-                <button class="range-btn active" data-range="24h">24H</button>
-                <button class="range-btn" data-range="7d">7D</button>
-                <button class="range-btn" data-range="30d">30D</button>
-              </div>
-            </div>
-            <div class="chart-wrap">
-              <canvas id="chart24h"></canvas>
             </div>
           </div>
 
@@ -207,79 +161,94 @@
             </div>
           </div>
 
+          <div class="card chart24-card">
+            <div class="card-header">
+              <span class="card-title">Sound History</span>
+              <div class="chart-range-btns">
+                <button class="range-btn active" data-range="24h">24H</button>
+                <button class="range-btn" data-range="7d">7D</button>
+                <button class="range-btn" data-range="30d">30D</button>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="chart24h"></canvas></div>
+          </div>
+
+          <div class="card hz-overview-card">
+            <div class="card-header"><span class="card-title">Frequency Overview</span><span class="card-sub">Hz distribution</span></div>
+            <div class="chart-wrap" style="height:160px"><canvas id="hzOverviewChart"></canvas></div>
+            <div class="hz-stats-row">
+              <div class="hz-stat"><span class="hz-stat-val" id="hz-avg">—</span><span class="hz-stat-label">Avg Hz</span></div>
+              <div class="hz-stat"><span class="hz-stat-val" id="hz-peak">—</span><span class="hz-stat-label">Peak Hz</span></div>
+              <div class="hz-stat"><span class="hz-stat-val" id="hz-low">—</span><span class="hz-stat-label">Low Hz</span></div>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- ===== PAGE: NODES ===== -->
+      <!-- NODES -->
       <section class="page" id="page-nodes">
         <div class="nodes-layout">
-          <div class="nodes-map-wrap">
-            <div id="nodesMap"></div>
-            <button class="btn btn-primary map-add-btn" id="add-node-btn">+ Add Node</button>
-          </div>
-          <div class="nodes-panel" id="nodes-panel">
+          <div class="nodes-map-wrap"><div id="nodesMap"></div></div>
+          <div class="nodes-panel">
             <div class="nodes-table-wrap">
               <div class="card-header" style="padding:1rem 1.2rem 0.5rem">
-                <span class="card-title">All Nodes</span>
-                <input class="search-input" id="node-search" placeholder="Search nodes…" />
+                <span class="card-title">Devices</span>
+                <input class="search-input" id="node-search" placeholder="Search…" />
               </div>
-              <table class="data-table" id="nodes-table">
+              <table class="data-table">
                 <thead><tr><th>ID</th><th>Name</th><th>Location</th><th>Status</th><th>Battery</th><th>SD</th><th>Last Seen</th></tr></thead>
                 <tbody id="nodes-tbody"></tbody>
               </table>
             </div>
           </div>
         </div>
-
-        <!-- Node detail bottom sheet -->
         <div class="bottom-sheet" id="node-sheet">
           <div class="sheet-handle"></div>
           <div class="sheet-content" id="node-sheet-content"></div>
         </div>
       </section>
 
-      <!-- ===== PAGE: RECORDINGS ===== -->
+      <!-- RECORDINGS -->
       <section class="page" id="page-recordings">
         <div class="rec-layout">
           <div class="rec-filters card">
             <input type="date" id="rec-date-from" class="filter-input" />
             <span class="filter-sep">→</span>
             <input type="date" id="rec-date-to" class="filter-input" />
-            <select class="filter-input" id="rec-node-filter">
-              <option value="">All Nodes</option>
-            </select>
+            <select class="filter-input" id="rec-node-filter"><option value="">All Devices</option></select>
             <button class="btn btn-primary" id="import-btn">⇪ Import</button>
             <input type="file" id="import-file" accept=".csv,.json" style="display:none" />
           </div>
-
           <div class="rec-main">
             <div class="card rec-table-card">
               <div class="card-header">
                 <span class="card-title">Recording Sessions</span>
                 <span class="rec-count" id="rec-count">0 sessions</span>
               </div>
-              <table class="data-table" id="rec-table">
-                <thead><tr><th>Timestamp</th><th>Node</th><th>Duration</th><th>Avg dB</th><th>Peak dB</th><th>Size</th><th></th></tr></thead>
+              <table class="data-table">
+                <thead><tr><th>Timestamp</th><th>Device</th><th>Duration</th><th>Avg dB</th><th>Peak dB</th><th>Avg Hz</th><th>Peak Hz</th><th>Size</th><th></th></tr></thead>
                 <tbody id="rec-tbody"></tbody>
               </table>
               <div class="pagination" id="rec-pagination"></div>
             </div>
+
             <div class="card spike-log">
               <div class="card-header"><span class="card-title">Spike Events</span><span class="card-tag alert-tag">ALERTS</span></div>
               <div id="spike-list"></div>
             </div>
 
-            <!-- CSV UPLOAD & ANALYSIS -->
+            <!-- CSV UPLOAD -->
             <div class="card csv-upload-card">
               <div class="card-header">
                 <span class="card-title">📂 Upload Your Data</span>
-                <span class="card-sub">CSV · Time + dB columns</span>
+                <span class="card-sub">CSV · timestamp, decibel, hz</span>
               </div>
               <div class="csv-upload-body">
                 <div class="csv-drop-zone" id="csv-drop-zone">
                   <div class="csv-drop-icon">⇪</div>
                   <div class="csv-drop-text">Drop your CSV here or <span class="csv-browse-link" id="csv-browse-link">browse</span></div>
-                  <div class="csv-drop-hint">Expected format: Column A = Date/Time &nbsp;·&nbsp; Column B = dB value<br/>First row = headers (Time, Environment)</div>
+                  <div class="csv-drop-hint">Row 1 = headers (timestamp, decibel, hz)<br/>Data loads into Device 1 automatically</div>
                   <input type="file" id="csv-upload-input" accept=".csv" style="display:none" />
                 </div>
                 <div id="csv-results" class="hidden">
@@ -287,61 +256,66 @@
                   <div class="csv-charts-grid">
                     <div class="card csv-chart-card">
                       <div class="card-header"><span class="card-title">dB Over Time</span><span id="csv-file-label" class="card-sub"></span></div>
-                      <div style="height:220px; padding:0.5rem;"><canvas id="csvLineChart"></canvas></div>
+                      <div style="height:200px;padding:0.5rem"><canvas id="csvLineChart"></canvas></div>
                     </div>
                     <div class="card csv-chart-card">
-                      <div class="card-header"><span class="card-title">Hourly Average</span><span class="card-sub">avg dB by hour of day</span></div>
-                      <div style="height:220px; padding:0.5rem;"><canvas id="csvHourChart"></canvas></div>
+                      <div class="card-header"><span class="card-title">Hz Over Time</span><span class="card-sub">frequency readings</span></div>
+                      <div style="height:200px;padding:0.5rem"><canvas id="csvHzLineChart"></canvas></div>
                     </div>
                     <div class="card csv-chart-card">
-                      <div class="card-header"><span class="card-title">dB Distribution</span><span class="card-sub">how often each level occurs</span></div>
-                      <div style="height:220px; padding:0.5rem;"><canvas id="csvDistChart"></canvas></div>
+                      <div class="card-header"><span class="card-title">Hourly Avg dB</span><span class="card-sub">by hour of day</span></div>
+                      <div style="height:200px;padding:0.5rem"><canvas id="csvHourChart"></canvas></div>
                     </div>
                     <div class="card csv-chart-card">
-                      <div class="card-header"><span class="card-title">Daily Trend</span><span class="card-sub">avg dB per day</span></div>
-                      <div style="height:220px; padding:0.5rem;"><canvas id="csvDailyChart"></canvas></div>
+                      <div class="card-header"><span class="card-title">Hz Distribution</span><span class="card-sub">frequency range buckets</span></div>
+                      <div style="height:200px;padding:0.5rem"><canvas id="csvHzDistChart"></canvas></div>
+                    </div>
+                    <div class="card csv-chart-card">
+                      <div class="card-header"><span class="card-title">dB Distribution</span><span class="card-sub">reading frequency histogram</span></div>
+                      <div style="height:200px;padding:0.5rem"><canvas id="csvDistChart"></canvas></div>
+                    </div>
+                    <div class="card csv-chart-card">
+                      <div class="card-header"><span class="card-title">Daily Trend</span><span class="card-sub">avg dB & Hz per day</span></div>
+                      <div style="height:200px;padding:0.5rem"><canvas id="csvDailyChart"></canvas></div>
                     </div>
                   </div>
-                  <div class="csv-table-wrap card">
+                  <div class="card csv-table-wrap">
                     <div class="card-header">
                       <span class="card-title">Raw Data Preview</span>
                       <button class="btn btn-ghost btn-sm" id="csv-clear-btn">✕ Clear</button>
                     </div>
                     <table class="data-table">
-                      <thead><tr><th>#</th><th>Timestamp</th><th>dB</th><th>Level</th></tr></thead>
+                      <thead><tr><th>#</th><th>Timestamp</th><th>dB</th><th>Hz</th><th>Level</th></tr></thead>
                       <tbody id="csv-preview-tbody"></tbody>
                     </table>
-                    <div style="padding:0.5rem 1rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text3)" id="csv-preview-note"></div>
+                    <div style="padding:0.5rem 1rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--text3)" id="csv-preview-note"></div>
                   </div>
                 </div>
               </div>
             </div>
-
+          </div>
         </div>
       </section>
 
-      <!-- ===== PAGE: ANALYTICS ===== -->
+      <!-- ANALYTICS -->
       <section class="page" id="page-analytics">
         <div class="page-grid analytics-grid">
-
           <div class="card heatmap-card">
-            <div class="card-header"><span class="card-title">Noise Heatmap</span><span class="card-sub">Hour × Day of Week · avg dB</span></div>
+            <div class="card-header"><span class="card-title">Noise Heatmap</span><span class="card-sub">Hour × Day · avg dB</span></div>
             <div id="heatmap-wrap"></div>
           </div>
-
           <div class="card fft-card">
             <div class="card-header"><span class="card-title">Frequency Spectrum</span><span class="card-sub">FFT Energy by Band</span></div>
             <div class="chart-wrap"><canvas id="fftChart"></canvas></div>
           </div>
-
           <div class="card trend-card">
-            <div class="card-header">
-              <span class="card-title">30-Day Trend</span>
-              <div id="trend-toggles"></div>
-            </div>
+            <div class="card-header"><span class="card-title">30-Day dB Trend</span><div id="trend-toggles"></div></div>
             <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
           </div>
-
+          <div class="card hz-trend-card">
+            <div class="card-header"><span class="card-title">Hz Trend</span><span class="card-sub">avg frequency over time</span></div>
+            <div class="chart-wrap"><canvas id="hzTrendChart"></canvas></div>
+          </div>
           <div class="card compliance-card">
             <div class="card-header"><span class="card-title">Quiet Hours Compliance</span></div>
             <div class="compliance-controls">
@@ -356,22 +330,20 @@
             </div>
             <div class="chart-wrap" style="height:120px"><canvas id="compChart"></canvas></div>
           </div>
-
           <div class="card stats-card">
             <div class="card-header"><span class="card-title">Summary Statistics</span></div>
             <div class="stats-grid" id="stats-grid"></div>
           </div>
-
         </div>
       </section>
 
-      <!-- ===== PAGE: EXPORT ===== -->
+      <!-- EXPORT -->
       <section class="page" id="page-export">
         <div class="export-layout">
           <div class="card export-config-card">
             <div class="card-header"><span class="card-title">Export Data</span></div>
             <div class="export-form">
-              <label class="form-label">Select Nodes</label>
+              <label class="form-label">Select Devices</label>
               <div id="export-node-checks" class="checkbox-group"></div>
               <label class="form-label">Date Range</label>
               <div class="date-row">
@@ -381,9 +353,8 @@
               </div>
               <label class="form-label">Data Type</label>
               <div class="checkbox-group">
-                <label><input type="checkbox" checked id="exp-raw" /> Raw dB Readings</label>
-                <label><input type="checkbox" checked id="exp-events" /> Classified Events</label>
-                <label><input type="checkbox" id="exp-fft" /> FFT Snapshots</label>
+                <label><input type="checkbox" checked id="exp-raw" /> Raw dB + Hz Readings</label>
+                <label><input type="checkbox" checked id="exp-events" /> Spike Events</label>
               </div>
               <label class="form-label">Format</label>
               <div class="radio-group">
@@ -393,6 +364,29 @@
               <div class="export-btn-row">
                 <button class="btn btn-primary" id="do-export-btn">⇩ Export Data</button>
                 <button class="btn btn-accent" id="gen-report-btn">📄 Academic Report</button>
+              </div>
+
+              <div class="wav-export-section">
+                <div class="wav-section-title">🎵 Export as WAV Audio</div>
+                <p class="wav-desc">Convert recorded dB + Hz data into a WAV audio file. Each reading generates a sine tone at the recorded frequency with amplitude scaled from the dB level.</p>
+                <div class="wav-controls">
+                  <label class="form-label">Device
+                    <select id="wav-node-select" class="sett-input"></select>
+                  </label>
+                  <label class="form-label">Duration per reading
+                    <select id="wav-ms" class="sett-input">
+                      <option value="50">50 ms (quick preview)</option>
+                      <option value="100" selected>100 ms</option>
+                      <option value="200">200 ms</option>
+                      <option value="500">500 ms (large file)</option>
+                    </select>
+                  </label>
+                </div>
+                <button class="btn btn-accent" id="wav-export-btn">⇩ Export WAV</button>
+                <div id="wav-progress" class="wav-progress hidden">
+                  <div class="wav-progress-bar"><div class="wav-progress-fill" id="wav-fill"></div></div>
+                  <span id="wav-status">Generating…</span>
+                </div>
               </div>
             </div>
           </div>
@@ -406,49 +400,36 @@
         </div>
       </section>
 
-      <!-- ===== PAGE: SETTINGS ===== -->
+      <!-- SETTINGS -->
       <section class="page" id="page-settings">
         <div class="settings-layout">
-
           <div class="card settings-section">
             <div class="settings-section-title">🎙 Microphone / Sensor</div>
             <div class="settings-grid">
               <label class="sett-label">Sample Rate
                 <select id="sett-samplerate" class="sett-input">
-                  <option>8 kHz</option><option>16 kHz</option><option>22.05 kHz</option><option value="44.1 kHz" selected>44.1 kHz</option><option>48 kHz</option>
+                  <option>8 kHz</option><option>16 kHz</option><option>22.05 kHz</option><option selected>44.1 kHz</option><option>48 kHz</option>
                 </select>
               </label>
               <label class="sett-label">Bit Depth
                 <select id="sett-bitdepth" class="sett-input">
-                  <option>12-bit</option><option>16-bit</option><option value="24-bit" selected>24-bit</option>
+                  <option>12-bit</option><option>16-bit</option><option selected>24-bit</option>
                 </select>
               </label>
               <label class="sett-label">Channel
-                <select id="sett-channel" class="sett-input">
-                  <option selected>Mono</option><option>Stereo</option>
-                </select>
+                <select id="sett-channel" class="sett-input"><option selected>Mono</option><option>Stereo</option></select>
               </label>
               <label class="sett-label">Gain (dB)
-                <div class="slider-row">
-                  <input type="range" min="-20" max="40" value="0" id="sett-gain" class="sett-slider" />
-                  <span id="sett-gain-val">0 dB</span>
-                </div>
+                <div class="slider-row"><input type="range" min="-20" max="40" value="0" id="sett-gain" class="sett-slider" /><span id="sett-gain-val">0 dB</span></div>
               </label>
               <label class="sett-label">Low Cutoff (Hz)
-                <div class="slider-row">
-                  <input type="range" min="20" max="500" value="80" id="sett-lowcut" class="sett-slider" />
-                  <span id="sett-lowcut-val">80 Hz</span>
-                </div>
+                <div class="slider-row"><input type="range" min="20" max="500" value="80" id="sett-lowcut" class="sett-slider" /><span id="sett-lowcut-val">80 Hz</span></div>
               </label>
               <label class="sett-label">High Cutoff (Hz)
-                <div class="slider-row">
-                  <input type="range" min="5000" max="22000" value="20000" id="sett-highcut" class="sett-slider" />
-                  <span id="sett-highcut-val">20000 Hz</span>
-                </div>
+                <div class="slider-row"><input type="range" min="5000" max="22000" value="20000" id="sett-highcut" class="sett-slider" /><span id="sett-highcut-val">20000 Hz</span></div>
               </label>
             </div>
           </div>
-
           <div class="card settings-section">
             <div class="settings-section-title">📅 Recording Schedule</div>
             <div class="sched-mode-row">
@@ -471,15 +452,12 @@
               <button class="btn btn-ghost btn-sm" id="add-block-btn">+ Add Time Block</button>
             </div>
             <div class="sched-apply-row">
-              <select id="sched-apply-node" class="sett-input">
-                <option value="all">Apply to All Nodes</option>
-              </select>
+              <select id="sched-apply-node" class="sett-input"><option value="all">Apply to All Devices</option></select>
               <button class="btn btn-primary btn-sm" id="export-config-btn">⇩ Export Config</button>
               <button class="btn btn-ghost btn-sm" id="import-config-btn">⇪ Import Config</button>
               <input type="file" id="import-config-file" accept=".json" style="display:none"/>
             </div>
           </div>
-
           <div class="card settings-section">
             <div class="settings-section-title">⌘ Bluetooth & Sync</div>
             <div class="settings-grid">
@@ -488,76 +466,48 @@
                   <option>5 min</option><option>15 min</option><option selected>30 min</option><option>1 hour</option><option>Manual only</option>
                 </select>
               </label>
-              <label class="sett-label">
-                <input type="checkbox" id="sett-gps-meta" checked /> Retrieve GPS/timezone from metadata
-              </label>
-              <label class="sett-label">
-                <input type="checkbox" id="sett-bt-auto" checked /> Auto-reconnect Bluetooth
-              </label>
+              <label class="sett-label"><input type="checkbox" id="sett-gps-meta" checked /> Retrieve GPS/timezone from metadata</label>
+              <label class="sett-label"><input type="checkbox" id="sett-bt-auto" checked /> Auto-reconnect Bluetooth</label>
             </div>
           </div>
-
           <div class="card settings-section">
             <div class="settings-section-title">🔔 Alert Thresholds</div>
             <div class="settings-grid">
               <label class="sett-label">Warning Level
-                <div class="slider-row">
-                  <input type="range" min="40" max="100" value="70" id="sett-warn" class="sett-slider warn-slider"/>
-                  <span id="sett-warn-val">70 dB</span>
-                </div>
+                <div class="slider-row"><input type="range" min="40" max="100" value="70" id="sett-warn" class="sett-slider warn-slider"/><span id="sett-warn-val">70 dB</span></div>
               </label>
               <label class="sett-label">Critical Level
-                <div class="slider-row">
-                  <input type="range" min="50" max="120" value="85" id="sett-crit" class="sett-slider crit-slider"/>
-                  <span id="sett-crit-val">85 dB</span>
-                </div>
+                <div class="slider-row"><input type="range" min="50" max="120" value="85" id="sett-crit" class="sett-slider crit-slider"/><span id="sett-crit-val">85 dB</span></div>
               </label>
               <label class="sett-label"><input type="checkbox" id="sett-spike" checked /> Enable Spike Detection</label>
               <label class="sett-label"><input type="checkbox" id="sett-notif-sound" /> Notification Sound</label>
             </div>
           </div>
-
           <div class="card settings-section">
             <div class="settings-section-title">🏫 Sensor Types</div>
-            <table class="data-table" id="sensor-types-table">
-              <thead><tr><th>Name</th><th>Sample Rate</th><th>Bit Depth</th><th>Freq Range</th><th>Notes</th><th></th></tr></thead>
-              <tbody id="sensor-types-tbody"></tbody>
-            </table>
+            <table class="data-table"><thead><tr><th>Name</th><th>Sample Rate</th><th>Bit Depth</th><th>Freq Range</th><th>Notes</th><th></th></tr></thead><tbody id="sensor-types-tbody"></tbody></table>
             <button class="btn btn-ghost btn-sm" id="add-sensor-type-btn">+ Add Sensor Type</button>
           </div>
-
           <div class="card settings-section">
             <div class="settings-section-title">⚙ App & Data</div>
             <div class="settings-grid">
-              <label class="sett-label">Campus Name
-                <input type="text" id="sett-campus" class="sett-input" value="University of Western Ontario" />
-              </label>
-              <label class="sett-label">Map Centre Lat
-                <input type="number" id="sett-lat" class="sett-input" value="43.0096" step="0.0001" />
-              </label>
-              <label class="sett-label">Map Centre Lng
-                <input type="number" id="sett-lng" class="sett-input" value="-81.2737" step="0.0001" />
-              </label>
+              <label class="sett-label">Project Name <input type="text" id="sett-campus" class="sett-input" value="EcoEcho Research" /></label>
+              <label class="sett-label">Map Centre Lat <input type="number" id="sett-lat" class="sett-input" value="43.0096" step="0.0001" /></label>
+              <label class="sett-label">Map Centre Lng <input type="number" id="sett-lng" class="sett-input" value="-81.2737" step="0.0001" /></label>
               <label class="sett-label">Data Retention
-                <select id="sett-retention" class="sett-input">
-                  <option>7 days</option><option>14 days</option><option selected>30 days</option><option>90 days</option>
-                </select>
+                <select id="sett-retention" class="sett-input"><option>7 days</option><option>14 days</option><option selected>30 days</option><option>90 days</option></select>
               </label>
               <label class="sett-label">Theme
-                <select id="sett-theme" class="sett-input">
-                  <option value="dark" selected>Dark</option><option value="light">Light</option>
-                </select>
+                <select id="sett-theme" class="sett-input"><option value="dark" selected>Dark</option><option value="light">Light</option></select>
               </label>
             </div>
             <button class="btn btn-danger btn-sm" id="clear-data-btn">🗑 Clear All Data</button>
           </div>
-
         </div>
       </section>
 
-    </main><!-- /pages -->
+    </main>
 
-    <!-- MOBILE BOTTOM NAV -->
     <nav id="bottom-nav">
       <a class="bnav-item active" data-page="overview"><span class="bnav-icon">◉</span><span>Overview</span></a>
       <a class="bnav-item" data-page="nodes"><span class="bnav-icon">◈</span><span>Nodes</span></a>
@@ -565,39 +515,31 @@
       <a class="bnav-item" data-page="analytics"><span class="bnav-icon">◫</span><span>Analytics</span></a>
       <a class="bnav-item" data-page="settings"><span class="bnav-icon">◎</span><span>Settings</span></a>
     </nav>
+  </div>
+</div>
 
-  </div><!-- /main-wrap -->
-
-</div><!-- /app -->
-
-<!-- ADD NODE MODAL -->
+<!-- MODALS -->
 <div class="modal-overlay hidden" id="add-node-modal">
   <div class="modal">
-    <div class="modal-header"><span class="modal-title">Add New Node</span><button class="icon-btn close-modal">✕</button></div>
+    <div class="modal-header"><span class="modal-title">Add New Device</span><button class="icon-btn close-modal">✕</button></div>
     <div class="modal-body">
-      <label class="form-label">Node Name <input type="text" id="mn-name" class="sett-input" placeholder="e.g. Node 5 — Library" /></label>
-      <label class="form-label">Location Description <input type="text" id="mn-loc" class="sett-input" placeholder="e.g. Near Main Library Entrance" /></label>
+      <label class="form-label">Device Name <input type="text" id="mn-name" class="sett-input" placeholder="e.g. Device 3" /></label>
+      <label class="form-label">Location Description <input type="text" id="mn-loc" class="sett-input" placeholder="e.g. Near Main Entrance" /></label>
       <div class="form-row">
         <label class="form-label">Latitude <input type="number" id="mn-lat" class="sett-input" step="0.0001" placeholder="43.0096" /></label>
         <label class="form-label">Longitude <input type="number" id="mn-lng" class="sett-input" step="0.0001" placeholder="-81.2737" /></label>
       </div>
       <label class="form-label">Sensor Type
-        <select id="mn-sensor" class="sett-input">
-          <option>INMP441 MEMS Mic (I2S)</option>
-          <option>Analog Electret (3.5mm)</option>
-          <option>USB Condenser</option>
-        </select>
+        <select id="mn-sensor" class="sett-input"><option>INMP441 MEMS Mic (I2S)</option><option>Analog Electret (3.5mm)</option><option>USB Condenser</option></select>
       </label>
       <label class="form-label">Notes <textarea id="mn-notes" class="sett-input" rows="2" placeholder="Any notes…"></textarea></label>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost close-modal">Cancel</button>
-      <button class="btn btn-primary" id="save-node-btn">Save Node</button>
+      <button class="btn btn-primary" id="save-node-btn">Save Device</button>
     </div>
   </div>
 </div>
-
-<!-- BLUETOOTH SCAN MODAL -->
 <div class="modal-overlay hidden" id="bt-modal">
   <div class="modal">
     <div class="modal-header"><span class="modal-title">Bluetooth Devices</span><button class="icon-btn close-modal">✕</button></div>
@@ -608,8 +550,6 @@
     <div class="modal-footer"><button class="btn btn-ghost close-modal">Close</button></div>
   </div>
 </div>
-
-<!-- CONFIRM MODAL -->
 <div class="modal-overlay hidden" id="confirm-modal">
   <div class="modal">
     <div class="modal-header"><span class="modal-title" id="confirm-title">Confirm</span></div>
@@ -620,8 +560,6 @@
     </div>
   </div>
 </div>
-
-<!-- TOAST -->
 <div id="toast-container"></div>
 
 <script src="data.js"></script>
