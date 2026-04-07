@@ -1,14 +1,14 @@
-/* CampusSound — Service Worker */
-const CACHE = 'campussound-v1';
+/* EcoEcho — Service Worker */
+const CACHE = 'ecoecho-v1';
 const SHELL = [
   './',
   './index.html',
-  './css/styles.css',
-  './js/data.js',
-  './js/charts.js',
-  './js/map.js',
-  './js/ui.js',
-  './js/app.js',
+  './styles.css',
+  './data.js',
+  './charts.js',
+  './map.js',
+  './ui.js',
+  './app.js',
   './manifest.json'
 ];
 
